@@ -1,0 +1,58 @@
+service: tropsorue
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  stackName: ${self:service}-${self:provider.stage}
+  region: eu-west-1
+  memorySize: 128
+  timeout: 20
+  logRetentionInDays: 14
+  profile: perso
+  environment:
+    ## Reuse TCP connection
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+functions:
+  listPlayers:
+    name: ${self:provider.stackName}-listPlayers
+    description: List players
+    handler: src/handlers/listPlayers.handler
+    events:
+      - http:
+          path: players
+          method: GET
+          cors: true
+          operationId: listPlayers
+
+  getPlayerById:
+    name: ${self:provider.stackName}-getPlayerById
+    description: Get player by id
+    handler: src/handlers/getPlayerById.handler
+    events:
+      - http:
+          path: players/{playerId}
+          method: GET
+          request:
+            parameters:
+              paths:
+                playerId: true
+          cors: true
+          operationId: getPlayerById
+
+custom:
+  accountId: ${aws:accountId}
+  esbuild:
+    packager: yarn
+    concurrency: 5
+    bundle: true
+    minify: true
+    sourcemap: true
+    keepNames: true
+
+plugins:
+  - serverless-esbuild

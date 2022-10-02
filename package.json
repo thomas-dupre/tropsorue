@@ -1,0 +1,47 @@
+{
+  "name": "tropsorue",
+  "version": "0.0.1",
+  "author": "Thomas Dupré",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@middy/core": "^3.4.0",
+    "@middy/do-not-wait-for-empty-event-loop": "^3.4.0",
+    "@middy/http-event-normalizer": "^3.4.0",
+    "@middy/http-json-body-parser": "^3.4.0",
+    "@middy/http-response-serializer": "^3.4.0",
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0"
+  },
+  "devDependencies": {
+    "c8": "^7.12.0",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "esbuild": "^0.15.10",
+    "eslint": "^8.24.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-chai-expect": "^3.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jest": "^27.0.4",
+    "eslint-plugin-mocha": "^10.1.0",
+    "express": "^4.18.1",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.5.1",
+    "serverless": "^3.22.0",
+    "serverless-esbuild": "^1.33.0",
+    "sinon": "^14.0.0"
+  },
+  "scripts": {
+    "format": "prettier \"**/*.{js,json,md,yaml,yml}\"",
+    "format:fix": "yarn format --write",
+    "lint": "eslint .",
+    "lint:fix": "yarn lint --fix",
+    "server": "PORT=3000 yarn nodemon --experimental-json-modules src/app.js localhost $PORT",
+    "test": "mocha --experimental-json-modules 'tests/**/*.test.js' --recursive",
+    "test:watch": "mocha test 'tests/**/*.test.js' --parallel --watch",
+    "test:cov": "c8 mocha --experimental-json-modules 'tests/**/*.test.js'",
+    "sls:package": "yarn sls package --stage=dev",
+    "sls:deploy": "yarn sls deploy --stage=dev"
+  }
+}

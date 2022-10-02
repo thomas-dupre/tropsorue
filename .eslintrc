@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "impliedStrict": true
+  },
+  "env": {
+    "node": true,
+    "es2020": true,
+    "mocha": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/recommended",
+    "plugin:mocha/recommended",
+    "plugin:chai-expect/recommended"
+  ],
+  "plugins": ["import", "mocha", "chai-expect"],
+  "rules": {
+    "import/no-deprecated": "warn",
+    "import/newline-after-import": "warn",
+    "import/no-useless-path-segments": "warn",
+    "import/no-named-as-default-member": "off",
+    "import/order": [
+      "warn", {
+        "alphabetize": {
+          "caseInsensitive": true,
+          "order": "asc"
+        },
+        "groups": [["builtin", "external"], ["internal"], ["parent", "sibling", "index"]],
+        "newlines-between": "always"
+    }]
+  }
+}

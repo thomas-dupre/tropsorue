@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "baseUrl": ".",
+    "outDir": "dist"
+  },
+  "include": ["src/*.js", "tests/*.js", "mocha.setup.js"],
+  "exclude": ["node_modules", "dist", "tests/*.json"]
+}
