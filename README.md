@@ -33,5 +33,3 @@ Use `yarn test` command to run the unit tests or `yarn test:cov` to run the cove
 Configure you aws credentials with `aws configure` and/or edit the profile in `serverless.yml`
 
 Use `yarn sls:deploy` to deploy the gateway api & lambda to aws with cloudformation
-
-

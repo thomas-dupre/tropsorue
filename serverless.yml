@@ -16,6 +16,7 @@ provider:
   environment:
     ## Reuse TCP connection
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    NODE_OPTIONS: --enable-source-maps
 
 functions:
   listPlayers:

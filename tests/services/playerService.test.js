@@ -1,20 +1,39 @@
-/* global expect sinon */
+/* global sinon */
 
 'use strict';
 
 import { expect } from 'chai';
+
 import { config } from '../../src/config/config.js';
 import {
   listPlayersFromSource,
   listAndSortByIdPlayers,
   fetchPlayerById,
+  listAndConcatPlayersName,
 } from '../../src/services/business/playerService.js';
 import httpService from '../../src/services/tools/httpService.js';
 import { CustomError } from '../../src/utils/errors.js';
 
-const jsonData = { players: [{ id: 23, firstname: "Novack" }, { id: 56, firstname: "Tony" }, { id: 1, firstname: "Cyril" }] };
+const jsonData = {
+  players: [
+    { id: 23, firstname: 'Novack', lastname: 'Jack', shortname: 'N.JA' },
+    { id: 56, firstname: 'Tony', lastname: 'Jack', shortname: 'T.JA' },
+    { id: 1, firstname: 'Cyril', lastname: 'Jack', shortname: 'C.JA' },
+  ],
+};
 
-const jsonSortedData = [{ id: 1, firstname: "Cyril"  }, { id: 23, firstname: "Novack"  }, { id: 56, firstname: "Tony"  }];
+const jsonSortedData = [
+  { id: 1, firstname: 'Cyril' },
+  { id: 23, firstname: 'Novack' },
+  { id: 56, firstname: 'Tony' },
+];
+const jsonPlayersName = ['Novak Jack', 'Tony Jack', 'Cyril Jack'];
+
+const jsonSortedShortnameData = [
+  { id: 1, firstname: 'Cyril', shortname: 'C.JA' },
+  { id: 23, firstname: 'Novack', shortname: 'N.JA' },
+  { id: 56, firstname: 'Tony', shortname: 'T.JA' },
+];
 
 const DATA_URL = config.DATA_URL;
 
@@ -96,7 +115,37 @@ describe('#playerService', function () {
       // Then
       expect(getJsonFromUrlStub.calledWith(DATA_URL)).to.be.true;
       expect(result).to.eventually.be.equal(jsonSortedData);
+      console.log(await result);
       expect((await result)[0].firstname).to.be.equal('Cyril');
+    });
+
+    it('should list & sort players by shortname', async function () {
+      // Given
+      getJsonFromUrlStub.resolves(jsonData);
+
+      // When
+      const result = listAndSortByIdPlayers(true, 'shortname');
+
+      // Then
+      expect(getJsonFromUrlStub.calledWith(DATA_URL)).to.be.true;
+      expect(result).to.eventually.be.equal(jsonSortedShortnameData);
+      // expect((await result)[0].shortname).to.be.equal('C.JA');
+    });
+
+    it('should throw a bad request error cause of wrong sort key', async function () {
+      // Given
+      getJsonFromUrlStub.resolves(jsonData);
+
+      // When
+      const result = listAndSortByIdPlayers(true, 'erere');
+
+      // Then
+      // expect(getJsonFromUrlStub.calledWith(DATA_URL)).to.be.false;
+
+      expect(result)
+        .to.eventually.be.rejectedWith('Key is not valid')
+        .and.be.an.instanceOf(CustomError)
+        .and.have.property('httpCode', 400);
     });
   });
 
@@ -145,6 +194,22 @@ describe('#playerService', function () {
         .to.eventually.be.rejectedWith('Not found')
         .and.be.an.instanceOf(CustomError)
         .and.have.property('httpCode', 404);
+    });
+  });
+
+  // Testing listAndConcatPlayersName function
+  describe('#listAndConcatPlayersName [FROM NETWORK]', function () {
+    it('should list the players and concat their first & last names', async function () {
+      // Given
+      getJsonFromUrlStub.resolves(jsonData);
+
+      // When
+      const result = listAndConcatPlayersName(true);
+
+      // Then
+      expect(getJsonFromUrlStub.calledWith(DATA_URL)).to.be.true;
+
+      expect(result).to.eventually.be.equal(jsonPlayersName);
     });
   });
 });

@@ -1,5 +1,3 @@
-'use strict';
-
 import { fetchPlayerById } from '../services/business/playerService.js';
 import { errorFormatter } from '../utils/errors.js';
 

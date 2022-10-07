@@ -8,9 +8,11 @@ import { errorFormatter } from '../utils/errors.js';
  * @returns
  */
 export function listPlayers(withNetwork = true) {
-  return async (_req, res) => {
+  return async (req, res) => {
     try {
-      const players = await listAndSortByIdPlayers(withNetwork);
+      // console.log(Object.keys(req));
+      const sortKey = req.query.sortBy;
+      const players = await listAndSortByIdPlayers(withNetwork, sortKey ?? 'id');
 
       return res.json(players);
     } catch (err) {

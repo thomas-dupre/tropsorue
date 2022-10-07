@@ -37,6 +37,10 @@ export function notFoundError(message, originalError) {
   throw new CustomError(message ?? 'Not found', 404, originalError);
 }
 
+export function badRequestError(message, originalError) {
+  throw new CustomError(message ?? 'Bad request', 400, originalError);
+}
+
 export function internalError(message, originalError) {
   throw new CustomError(message ?? 'Internal server error', 500, originalError);
 }

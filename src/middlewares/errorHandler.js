@@ -4,7 +4,7 @@ import { errorFormatter } from '../utils/errors';
 
 /**
  * Catch the errors & tranform them with a status code & body
- * @returns 
+ * @returns
  */
 export function errorHandler() {
   return {
